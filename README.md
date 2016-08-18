@@ -72,7 +72,7 @@ open beta build can be downloaded from: https://ibm.biz/iibopenbeta
 2. Copy the built file into the installation directory:
 
   `sudo cp -f statsdsw.lil /opt/ibm/iib-10.0.0.5/server/lil/` (Linux and Mac OS X)  
-  `copy /y statsdsw.lil "C:\Program Files\IBM\IIB\10.0.0.5\server\lil\"` (Windows)
+  `copy /y statsdsw.lil "C:\Program Files\IBM\IIB\10.0.0.5\server\bin\"` (Windows)
 
 3. Start all integration nodes again:
 
