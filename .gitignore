@@ -22,3 +22,4 @@ x64
 Debug
 Release
 !prebuilt/*/*.lil
+*.pyc
