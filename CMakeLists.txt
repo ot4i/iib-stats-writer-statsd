@@ -29,3 +29,8 @@ find_library (IMBDFPLG NAMES imbdfplg PATHS ${IIB_LIBRARIES_DIR})
 add_library (statsdsw SHARED StatsdStatsWriter.cpp StatsdStatsWriter.hpp UdpSocket.cpp UdpSocket.hpp)
 target_link_libraries (statsdsw ${IMBDFPLG} ${Boost_LIBRARIES})
 set_target_properties (statsdsw PROPERTIES PREFIX "" SUFFIX ".lil" CXX_STANDARD 11)
+
+if (WIN32)
+  set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
+  set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
+endif()
