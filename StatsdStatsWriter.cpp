@@ -245,9 +245,11 @@ void StatsdStatsWriter::write(const CsiStatsRecord* record) {
   /*
    * If not connected, or we haven't been configured, then bail out early.
    */
-  if (!iSocket) {
-    return;
-  }
+#if defined(AVOID_CXX11)
+  if (iSocket.get() == NULL) { return; }
+#else
+    if (!iSocket) { return; }
+#endif
 
   /*
    * Calculate the base name for all of the metrics. This is as follows:

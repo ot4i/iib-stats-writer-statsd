@@ -13,6 +13,10 @@
 #include <boost/asio.hpp>
 #include <string>
 
+#if defined(AVOID_CXX11)
+# include "Compat.hpp"
+#endif
+
 class UdpSocket {
 
 public:
