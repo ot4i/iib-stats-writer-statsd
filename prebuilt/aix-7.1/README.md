@@ -1,4 +1,4 @@
-# AIX versions
+# LIL variants
 
 ## statsdsw-xlC13.lil
 
