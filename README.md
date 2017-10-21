@@ -21,6 +21,11 @@ There are no releases yet. In order to try this sample, you must build the code 
 
 ### Build dependencies
 
+#### AIX only
+
+Current build process uses Makefile.aix rather than conan; see Makefile.aix for customisation. 
+Boost 1.6.0 must be downloaded manually, and either GNU GCC 6.3.0 or xlC 13 must be installed.
+
 #### C++ compiler
 You need a recent C++ compiler that supports C++11. For example, GNU GCC 4.8+ (Linux),
 Microsoft Visual Studio 2015 (Windows), or Xcode 7.3 (Mac OS X). Any other compiler
