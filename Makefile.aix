@@ -1,12 +1,15 @@
-IIB_INSTALL_LOCATION=/cmvc/mqsi/output/ib1000/rios_aix_4/ib1000-FP05_P/iib-10.0.0.5
-BOOST_LOCATION=/Development/tdolby/boost/boost_1_60_0
-GCC_WARNFLAGS=-Wno-deprecated-declarations -Wno-overflow
+
+# Customise for local installations
+IIB_INSTALL_LOCATION=/opt/ibm/iib-10.0.0.5
+BOOST_LOCATION=/Development/boost/boost_1_60_0
 XLC_LOCATION=/opt/IBM/xlC/13.1.3
+
+
 all:: statsdsw-xlC13.lil statsdsw-gcc630.lil
 
 statsdsw-xlC13.lil::
 	$(XLC_LOCATION)/bin/xlC_r -DAVOID_CXX11 -qlanglvl=extended0x -q64 -qmkshrobj -o statsdsw-xlC13.lil StatsdStatsWriter.cpp UdpSocket.cpp $(BOOST_LOCATION)/libs/system/src/error_code.cpp -I. -I$(BOOST_LOCATION) -I$(IIB_INSTALL_LOCATION)/server/include/plugin -lpthread -L$(IIB_INSTALL_LOCATION)/server/lib -limbdfplg 
 
 statsdsw-gcc630.lil::
-	g++ -shared -fPIC -maix64 -D_LP64 -DBIP_CXX11_SUPPORT $(GCC_WARNFLAGS)  -o statsdsw-gcc630.lil StatsdStatsWriter.cpp UdpSocket.cpp $(BOOST_LOCATION)/libs/system/src/error_code.cpp -I. -I$(BOOST_LOCATION) -I$(IIB_INSTALL_LOCATION)/server/include/plugin -lpthread -L$(IIB_INSTALL_LOCATION)/server/lib -limbdfplg 
+	g++ -shared -fPIC -maix64 -D_LP64 -DBIP_CXX11_SUPPORT -Wno-deprecated-declarations -Wno-overflow -o statsdsw-gcc630.lil StatsdStatsWriter.cpp UdpSocket.cpp $(BOOST_LOCATION)/libs/system/src/error_code.cpp -I. -I$(BOOST_LOCATION) -I$(IIB_INSTALL_LOCATION)/server/include/plugin -lpthread -L$(IIB_INSTALL_LOCATION)/server/lib -limbdfplg 
 
