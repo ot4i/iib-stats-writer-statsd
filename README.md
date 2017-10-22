@@ -17,14 +17,14 @@ runtime.
 This repository contains a small sample C plugin written using this new API that writes the message flow statistics and accounting data to StatsD (https://github.com/etsy/statsd). StatsD can forward the data on to monitoring tools such as Graphite (http://graphite.wikidot.com) and Grafana (http://grafana.org).
 
 ## Installation
-There are no releases yet. In order to try this sample, you must build the code yourself.
+There are binaries for Linux, MacOS, Windows, and AIX in the prebuilt subdirectory. It is also possible to build the code yourself.
+
+
+### AIX 
+
+See [README-AIX.md](README-AIX.md) for more information on building and installing this plugin on AIX.
 
 ### Build dependencies
-
-#### AIX only
-
-Current build process uses Makefile.aix rather than conan; see Makefile.aix for customisation. 
-Boost 1.6.0 must be downloaded manually, and either GNU GCC 6.3.0 or xlC 13 must be installed.
 
 #### C++ compiler
 You need a recent C++ compiler that supports C++11. For example, GNU GCC 4.8+ (Linux),
