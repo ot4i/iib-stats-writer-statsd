@@ -38,7 +38,8 @@ UdpSocket::~UdpSocket() {
 
 }
 
-void UdpSocket::send(const std::u16string& data) {
+void UdpSocket::send(const std::string& data) 
+{
   if ((iBuffer.length() + 1 + data.length()) > UDP_MAX_PACKET_SIZE) {
     flush();
   }
@@ -49,6 +50,6 @@ void UdpSocket::send(const std::u16string& data) {
 }
 
 void UdpSocket::flush() {
-  iSocket.send_to(boost::asio::buffer(utf_to_utf<char>(iBuffer)), iEndpoint);
+  iSocket.send_to(boost::asio::buffer(iBuffer), iEndpoint);
   iBuffer.clear();
 }

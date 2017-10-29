@@ -22,16 +22,16 @@ class UdpSocket {
 public:
 
   UdpSocket(const std::u16string& hostname, const std::u16string& port);
-  ~UdpSocket();
+  virtual ~UdpSocket();
 
-  void send(const std::u16string& data);
-  void flush();
+  virtual void send(const std::string& data);
+  virtual void flush();
 
-private:
+protected:
 
   std::u16string iHostname;
   std::u16string iPort;
-  std::u16string iBuffer;
+  std::string iBuffer;
 
   boost::asio::io_service iIOService;
   boost::asio::ip::udp::endpoint iEndpoint;
