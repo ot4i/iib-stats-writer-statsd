@@ -26,6 +26,13 @@ The build has several prerequisites:
    Choose the correct RPM for your AIX version, and install the compiler plus any prerequisite RPMs. Ensure that /opt/freeware/bin 
    in included in the PATH environment variable. 
 
+5. GoogleTest (for unit testing)
+
+   Downloadable from various sources including https://github.com/google/googletest/releases but not supported official by IBM. 
+   The code has most recently been tested with release 1.8.0 but should work with any recent level; set GTEST_SOURCE_LOCATION to point to the root of the unzipped download, as no building is needed.
+
 The key operational difference between the two LILs is that the GCC-built LIL requires extra libraries to be installed for GCC
 support; libstdc++-6.3.0 and libgcc-6.3.0 must be installed from RPMs on any system on which the LIL is to be used. The xlC-built 
 LIL needs no extra libraries. See README.md in prebuilt/aix-7.1 for more details.
+
+Once Makefile.aix has been customised (along with test/Makefile.aix), then running the appropriate target using ```make -f Makefile.aix test-all``` (if both compilers are available), or one of ```make -f Makefile.aix test-gcc``` (for GCC only) and ```make -f Makefile.aix test-xlC``` (for xlC only) if only one compiler is available.
