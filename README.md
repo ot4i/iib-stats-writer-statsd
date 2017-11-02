@@ -95,7 +95,9 @@ The sample plugin writes portions of the statistic record as metrics to StatsD s
 - hostname.nodename.servername.uniqueflowname.averageCPUTimePerMessage
 - hostname.nodename.servername.uniqueflowname.averageElapsedTimePerMessage
 
-In order to test this sample plugin, you will need at the very least a StatsD server. If you want to generate graphs of the data, then you will need Graphite and Grafana as well. The following Docker image contains the entire stack and is very handy for test purposes: https://github.com/kamon-io/docker-grafana-graphite
+Unit testing can be achieved by running `ctest -V` and confirming that the tests have all passed.
+
+For system testing this plugin, you will need at the very least a StatsD server. If you want to generate graphs of the data, then you will need Graphite and Grafana as well. The following Docker image contains the entire stack and is very handy for test purposes: https://github.com/kamon-io/docker-grafana-graphite
 
 To configure and enable the sample plugin once it has been installed, follow these steps:
 
