@@ -59,56 +59,35 @@ class StatsdStatsWriter_UnitTest: public ::testing::Test
 public:
 
   StatsdStatsWriter_UnitTest()
-    : zeroDate( { 0 } ),
-      zeroTime( { 0 } ),
-      zeroGmtTime( { 0 } ),
-      iMFRecord( { u"dummyBroker", /*   const CciChar* brokerLabel; */
-                   u"a", /*   const CciChar* brokerUUID; */
-                   u"b", /*   const CciChar* executionGroupName; */
-                   u"c", /*   const CciChar* executionGroupUUID; */
-                   u"d", /*   const CciChar* messageFlowName; */
-                   u"e", /*   const CciChar* messageFlowUUID; */
-                   u"f", /*   const CciChar* applicationName; */
-                   u"g", /*   const CciChar* applicationUUID; */
-                   u"h", /*   const CciChar* libraryName; */
-                   u"i", /*   const CciChar* libraryUUID; */
-                   zeroDate, /*   struct CciDate startDate; */
-                   zeroTime, /*   struct CciTime startTime; */
-                   zeroGmtTime, /*   struct CciTimestamp gmtStartTime; */
-                   zeroDate, /*   struct CciDate endDate; */
-                   zeroTime, /*   struct CciTime endTime; */
-                   zeroGmtTime, /*   struct CciTimestamp gmtEndTime; */
-                   0, /*   CciInt totalElapsedTime; */
-                   0, /*   CciInt maximumElapsedTime; */
-                   0, /*   CciInt minimumElapsedTime; */
-                   0, /*   CciInt totalCPUTime; */
-                   0, /*   CciInt maximumCPUTime; */
-                   0, /*   CciInt minimumCPUTime; */
-                   0, /*   CciInt cpuTimeWaitingForInputMessage; */
-                   0, /*   CciInt elapsedTimeWaitingForInputMessage; */
-                   0, /*   CciCount totalInputMessages; */
-                   0, /*   CciInt totalSizeOfInputMessages; */
-                   0, /*   CciInt maximumSizeOfInputMessages; */
-                   0, /*   CciInt minimumSizeOfInputMessages; */
-                   0, /*   CciCount numberOfThreadsInPool; */
-                   0, /*   CciCount timesMaximumNumberOfThreadsReached; */
-                   0, /*   CciCount totalNumberOfMQErrors; */
-                   0, /*   CciCount totalNumberOfMessagesWithErrors; */
-                   0, /*   CciCount totalNumberOfErrorsProcessingMessages; */
-                   0, /*   CciCount totalNumberOfTimeOutsWaitingForRepliesToAggregateMessages; */
-                   0, /*   CciCount totalNumberOfCommits; */
-                   0, /*   CciCount totalNumberOfBackouts; */
-                   u"j", /*   const CciChar* accountingOrigin; */ } )
   {
-    iRecord = { CSI_STATS_RECORD_VERSION_1, /*  CsiStatsRecordVersion version; */
-                CSI_STATS_RECORD_TYPE_SNAPSHOT, /*  CsiStatsRecordType type; */
-                CSI_STATS_RECORD_CODE_SNAPSHOT, /*  CsiStatsRecordCode code; */
-                iMFRecord, /* CsiStatsRecordMessageFlow messageFlow; */
-                0, /* CciCount numberOfThreads; */
-                NULL, /* const CsiStatsRecordThread* threads; */
-                0, /* CciCount numberOfNodes; */
-                NULL /* const CsiStatsRecordNode* nodes; */
-              };
+    memset((void *)&zeroDate, 0, sizeof(zeroDate));
+    memset((void *)&zeroTime, 0, sizeof(zeroTime));
+    memset((void *)&zeroGmtTime, 0, sizeof(zeroGmtTime));
+    memset((void *)&iMFRecord, 0, sizeof(iMFRecord));
+    memset((void *)&iRecord, 0, sizeof(iRecord));
+
+    iMFRecord.brokerLabel = u"dummyBroker";
+    iMFRecord.brokerUUID = u"a";
+    iMFRecord.executionGroupName = u"b";
+    iMFRecord.executionGroupUUID = u"c";
+    iMFRecord.messageFlowName = u"d";
+    iMFRecord.messageFlowUUID = u"e";
+    iMFRecord.applicationName = u"f";
+    iMFRecord.applicationUUID = u"g";
+    iMFRecord.libraryName = u"h";
+    iMFRecord.libraryUUID = u"i";
+    iMFRecord.startDate = zeroDate;
+    iMFRecord.startTime = zeroTime;
+    iMFRecord.gmtStartTime = zeroGmtTime;
+    iMFRecord.endDate = zeroDate;
+    iMFRecord.endTime = zeroTime;
+    iMFRecord.gmtEndTime = zeroGmtTime;
+    iMFRecord.accountingOrigin = u"j";
+
+    iRecord.version = CSI_STATS_RECORD_VERSION_1;
+    iRecord.type = CSI_STATS_RECORD_TYPE_SNAPSHOT;
+    iRecord.code = CSI_STATS_RECORD_CODE_SNAPSHOT;
+    iRecord.messageFlow = iMFRecord;
   }
 
   struct CciDate zeroDate;
@@ -137,7 +116,7 @@ TEST_F(StatsdStatsWriter_UnitTest, construction)
 TEST_F(StatsdStatsWriter_UnitTest, udpSocketWriteWithUnicode)
 {
   // Construct test data, and override the fixture class to get the right broker label
-  char16_t simplifiedChineseWchars[] = { 0x4ED6 , 0x4EEC , 0x4E3A , 0x4EC0 , 0x4E48 , 0x4E0D , 0x8BF4 , 0x4E2D , 0x6587 };
+  char16_t simplifiedChineseWchars[] = { 0x4ED6 , 0x4EEC , 0x4E3A , 0x4EC0 , 0x4E48 , 0x4E0D , 0x8BF4 , 0x4E2D , 0x6587, 0x0000 };
   iRecord.messageFlow.brokerLabel = simplifiedChineseWchars;
 
   // Expect this to be sent via the UdpSocket
@@ -170,5 +149,6 @@ TEST_F(StatsdStatsWriter_UnitTest, udpSocketWriteWithUnicode)
 
   // Mock will validate on exit - testStatsdStatsWriter deletes the mock on 
   // destruction, triggering validation of EXPECT_CALLs. 
+  //
   // Data validation errors will have been flagged already in fakeSend().
 }
