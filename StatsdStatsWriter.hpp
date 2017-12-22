@@ -14,13 +14,17 @@
 #include <memory>
 #include <string>
 
+#if defined(AVOID_CXX11)
+# include "Compat.hpp"
+#endif
+
 class UdpSocket;
 
 class StatsdStatsWriter {
 
 public:
-
-  StatsdStatsWriter();
+  // socket can be passed in for testing purposes
+  StatsdStatsWriter(UdpSocket *socket = NULL);
   ~StatsdStatsWriter();
 
   CciSize getAttributeName(int* rc, int index, CciChar* buffer, CciSize bufferLength) const;
@@ -36,7 +40,11 @@ private:
   CsiStatsWriter* iWriter;
   std::u16string iHostname;
   std::u16string iPort;
+#if defined(AVOID_CXX11)
+  std::auto_ptr<UdpSocket> iSocket;
+#else
   std::unique_ptr<UdpSocket> iSocket;
+#endif
 
   uint64_t calculateMillis(const CciDate& date, const CciTime& time);
 

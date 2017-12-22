@@ -17,7 +17,12 @@ runtime.
 This repository contains a small sample C plugin written using this new API that writes the message flow statistics and accounting data to StatsD (https://github.com/etsy/statsd). StatsD can forward the data on to monitoring tools such as Graphite (http://graphite.wikidot.com) and Grafana (http://grafana.org).
 
 ## Installation
-There are no releases yet. In order to try this sample, you must build the code yourself.
+There are binaries for Linux, MacOS, Windows, and AIX in the prebuilt subdirectory. It is also possible to build the code yourself.
+
+
+### AIX 
+
+See [README-AIX.md](README-AIX.md) for more information on building and installing this plugin on AIX.
 
 ### Build dependencies
 
@@ -63,6 +68,10 @@ open beta build can be downloaded from: https://ibm.biz/iibopenbeta
 6. If the build completes successfully, then a file named **statsdsw.lil**
    will have been created in the current directory. Check that this file exists.
 
+7. To test the resulting binary, run CTest to run and view unit tests results:
+
+  `ctest -V`
+
 ### Installation instructions
 
 1. Stop all integration nodes that are using the installation:
@@ -90,7 +99,9 @@ The sample plugin writes portions of the statistic record as metrics to StatsD s
 - hostname.nodename.servername.uniqueflowname.averageCPUTimePerMessage
 - hostname.nodename.servername.uniqueflowname.averageElapsedTimePerMessage
 
-In order to test this sample plugin, you will need at the very least a StatsD server. If you want to generate graphs of the data, then you will need Graphite and Grafana as well. The following Docker image contains the entire stack and is very handy for test purposes: https://github.com/kamon-io/docker-grafana-graphite
+Unit testing can be achieved by running `ctest -V` and confirming that the tests have all passed.
+
+For system testing this plugin, you will need at the very least a StatsD server. If you want to generate graphs of the data, then you will need Graphite and Grafana as well. The following Docker image contains the entire stack and is very handy for test purposes: https://github.com/kamon-io/docker-grafana-graphite
 
 To configure and enable the sample plugin once it has been installed, follow these steps:
 

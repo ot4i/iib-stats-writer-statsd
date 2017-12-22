@@ -1,0 +1,25 @@
+
+# Customise for local installations
+IIB_INSTALL_LOCATION=/opt/ibm/iib-10.0.0.5
+BOOST_LOCATION=/Development/boost/boost_1_60_0
+XLC_LOCATION=/opt/IBM/xlC/13.1.3
+# Download from Googletest source - no building required, as all
+# necessary C++ files are picked up and compiled automatically.
+GTEST_SOURCE_LOCATION=/Development/gtest/googletest-release-1.8.0
+
+GTEST_FROM_SOURCE=$(GTEST_SOURCE_LOCATION)/googletest/src/gtest-all.cc -I$(GTEST_SOURCE_LOCATION)/googletest $(GTEST_SOURCE_LOCATION)/googlemock/src/gmock-all.cc -I$(GTEST_SOURCE_LOCATION)/googlemock -I.. -I$(GTEST_SOURCE_LOCATION)/googlemock/include -I$(GTEST_SOURCE_LOCATION)/googletest/include
+
+gcc:: statsd_test-gcc630
+	./statsd_test-gcc630
+
+xlC:: statsd_test-xlC13
+	./statsd_test-xlC13
+
+all:: xlC gcc
+
+statsd_test-xlC13:: StatsdStatsWriter_UnitTest.cpp ../StatsdStatsWriter.cpp ../UdpSocket.cpp ../StatsdStatsWriter.hpp ../UdpSocket.hpp ../Compat.hpp
+	$(XLC_LOCATION)/bin/xlC_r -DAVOID_CXX11 -qsuppress=1540-0198 -qlanglvl=extended0x -q64 -o statsd_test-xlC13 test_main.cpp StatsdStatsWriter_UnitTest.cpp ../StatsdStatsWriter.cpp ../UdpSocket.cpp $(BOOST_LOCATION)/libs/system/src/error_code.cpp $(GTEST_FROM_SOURCE) -I$(BOOST_LOCATION) -I$(IIB_INSTALL_LOCATION)/server/include/plugin -lpthread -L$(IIB_INSTALL_LOCATION)/server/lib -limbdfplg 
+
+statsd_test-gcc630:: StatsdStatsWriter_UnitTest.cpp ../StatsdStatsWriter.cpp ../UdpSocket.cpp ../StatsdStatsWriter.hpp ../UdpSocket.hpp
+	g++ -fPIC -maix64 -D_LP64 -DBIP_CXX11_SUPPORT -Wno-deprecated-declarations -Wno-overflow -o statsd_test-gcc630 test_main.cpp StatsdStatsWriter_UnitTest.cpp ../StatsdStatsWriter.cpp ../UdpSocket.cpp $(BOOST_LOCATION)/libs/system/src/error_code.cpp $(GTEST_FROM_SOURCE) -I$(BOOST_LOCATION) -I$(IIB_INSTALL_LOCATION)/server/include/plugin -lpthread -L$(IIB_INSTALL_LOCATION)/server/lib -limbdfplg 
+

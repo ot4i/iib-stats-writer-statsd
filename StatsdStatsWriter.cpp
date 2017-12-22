@@ -111,8 +111,16 @@ namespace {
 /*
  * Constructor.
  */
-StatsdStatsWriter::StatsdStatsWriter()
- : iWriter(nullptr) {
+StatsdStatsWriter::StatsdStatsWriter(UdpSocket *socket)
+ : iWriter(nullptr) 
+{
+  /*
+   * Set the socket initially to the passed-in socket if it has
+   * been set; this is normally used for unit testing with a mock
+   * socket.
+   */
+  if ( socket != NULL )
+    iSocket.reset(socket);
 
   /*
    * Create the virtual function table for the statistics writer.
@@ -245,9 +253,11 @@ void StatsdStatsWriter::write(const CsiStatsRecord* record) {
   /*
    * If not connected, or we haven't been configured, then bail out early.
    */
-  if (!iSocket) {
-    return;
-  }
+#if defined(AVOID_CXX11)
+  if (iSocket.get() == NULL) { return; }
+#else
+    if (!iSocket) { return; }
+#endif
 
   /*
    * Calculate the base name for all of the metrics. This is as follows:
@@ -372,9 +382,9 @@ void StatsdStatsWriter::writeMessageFlowMetrics(const std::u16string& metricbase
  */
 template <class T>
 void StatsdStatsWriter::writeMetric(const std::u16string& metricbase, const std::u16string& metricname, T value) {
-  std::u16string metric(metricbase + metricname);
-  metric += u':';
-  metric += utf_to_utf<char16_t>(std::to_string(value));
-  metric += u"|g";
+  std::string metric(utf_to_utf<char>(metricbase) + utf_to_utf<char>(metricname));
+  metric += ':';
+  metric += std::to_string(value);
+  metric += "|g";
   iSocket->send(metric);
 }

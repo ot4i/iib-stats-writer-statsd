@@ -1,7 +1,8 @@
 cmake_minimum_required (VERSION 3.5)
-project (iib-stats-writer-statsd CXX)
 
-include(conanbuildinfo.cmake)
+include_directories(..)
+
+include(../conanbuildinfo.cmake)
 conan_basic_setup()
 
 set (Boost_USE_STATIC_LIBS ON)
@@ -25,18 +26,15 @@ endif ()
 
 add_definitions (-DBIP_CXX11_SUPPORT=1)
 include_directories (${IIB_INCLUDES_DIR})
-find_library (IMBDFPLG NAMES imbdfplg PATHS ${IIB_LIBRARIES_DIR})
 
-add_library (statsdsw SHARED StatsdStatsWriter.cpp StatsdStatsWriter.hpp UdpSocket.cpp UdpSocket.hpp)
-target_link_libraries (statsdsw ${IMBDFPLG} ${Boost_LIBRARIES})
-set_target_properties (statsdsw PROPERTIES PREFIX "" SUFFIX ".lil" CXX_STANDARD 11)
 
-if (WIN32)
-  set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
-  set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
-endif()
+# Enable testing
 
-if (UNIX)
-  enable_testing()
-  add_subdirectory(test)
-endif()
+# Linking to a .lil file (which is what IIB requires) is complicated, and for this size
+# of project it's easier to build the source again.
+add_executable(statsd_test test_main.cpp StatsdStatsWriter_UnitTest.cpp ../StatsdStatsWriter.cpp ../StatsdStatsWriter.hpp ../UdpSocket.cpp ../UdpSocket.hpp)
+target_link_libraries (statsd_test ${Boost_LIBRARIES} gmock pthread)
+set_target_properties (statsd_test PROPERTIES CXX_STANDARD 11)
+
+enable_testing()
+add_test(NAME statsd_test COMMAND statsd_test)
