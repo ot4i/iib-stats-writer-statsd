@@ -68,6 +68,10 @@ open beta build can be downloaded from: https://ibm.biz/iibopenbeta
 6. If the build completes successfully, then a file named **statsdsw.lil**
    will have been created in the current directory. Check that this file exists.
 
+7. To test the resulting binary, run CTest to run and view unit tests results:
+
+  `ctest -V`
+
 ### Installation instructions
 
 1. Stop all integration nodes that are using the installation:
